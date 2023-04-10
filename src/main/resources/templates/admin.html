@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<center>
+<body>
+<h1>Ваша личная страница</h1>
+<br/><br/>
+<div>
+
+    <form action="/admin/newUser" target="_blank">
+
+
+    <button>Новый пользователь</button></form>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>LastName</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Password</th>
+            <th>Roles</th>
+        </tr>
+        <tr th:each="user : ${list}">
+            <td th:utext="${user.getId()}">Id</td>
+            <td th:utext="${user.getUserName()}">userName</td>
+            <td th:utext="${user.getLastName()}">lastName</td>
+            <td th:utext="${user.getEmail()}">Email</td>
+            <td th:utext="${user.getAge()}">age</td>
+            <td th:utext="${user.getPassword()}">age</td>
+            <td th:utext="${user.roleToString()}">age</td>
+            <td>
+                <form th:method="GET"  th:action="@{admin/{id}/edit(id=${user.getId()})}">
+                    <input type="submit" value="Изменить данные пользователя">
+                </form>
+                <form th:method="DELETE" th:action="@{admin/delete/{id}(id=${user.getId})}" >
+                    <input type="submit" value="Удалить пользователя"/>
+                </form>
+    </table>
+
+    <p> Вернуться на <a href="/">главную страницу</a></p>
+    <form th:method="POST" th:action="@{/logout}">
+        <input type="submit" value="Logout!"/>
+    </form>
+
+</div>
+</body>
+</center>
+</html>
