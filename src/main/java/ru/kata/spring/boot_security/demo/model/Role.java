@@ -44,6 +44,15 @@ public class Role implements GrantedAuthority {
         this.role = role;
     }
 
+
+    @Override
+    public String getAuthority() {
+        return getRole();
+    }
+
+    public String getNameRole() {
+        return role.substring("ROLE_".length());
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,14 +72,5 @@ public class Role implements GrantedAuthority {
                 "id=" + id +
                 ", role='" + role + '\'' +
                 '}';
-    }
-
-    @Override
-    public String getAuthority() {
-        return getRole();
-    }
-
-    public String getNameRole() {
-        return role.substring("ROLE_".length());
     }
 }

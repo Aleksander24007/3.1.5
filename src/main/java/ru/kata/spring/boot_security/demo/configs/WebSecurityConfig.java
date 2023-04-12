@@ -30,7 +30,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and();
     }
 
-    // аутентификация inMemory
-
-
 }

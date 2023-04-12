@@ -43,7 +43,7 @@ public class AdminController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Long id, Model model) {
+    public String getPageEdit(@PathVariable("id") Long id, Model model) {
         User user = userService.getByUserId(id);
         model.addAttribute("user", user);
         List<Role> roles = (List<Role>) roleService.getAllRoles();
