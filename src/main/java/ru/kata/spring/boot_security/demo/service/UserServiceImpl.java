@@ -47,14 +47,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void update(User user, Long id) {
-        User userFromDb = userRepository.findById(id).get();
-        if (userFromDb.getPassword().equals(user.getPassword())) {
-            userRepository.save(user);
+    public void update(User user) {
+        String pass = user.getPassword();
+        if (pass.isEmpty()) {
+            user.setPassword(userRepository.findById(user.getId()).get().getPassword());
         } else {
-            user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(user.getPassword()));
-            userRepository.save(user);
+            user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(pass));
         }
+        userRepository.save(user);
     }
 
     @Override
@@ -83,12 +83,6 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("User not found");
         }
         User user = optionalUser.get();
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                mapRolesToAuthorities(user.getListRole()));
-    }
-
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roleList) {
-        return roleList.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).
-                collect(Collectors.toList());
+        return user;
     }
 }

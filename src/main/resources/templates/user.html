@@ -1,40 +1,74 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<center>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <title>admin</title>
+</head>
 <body>
-<h1>Личная страница</h1>
-<br/><br/>
-<div>
+<header>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <h3 class="navbar-brand col-md-3 col-lg-2 mr-0 px-3"><span th:text="${user.getUserName()}">VALUE</span>
+            with roles: <span th:text="${user.roleToString()}"></span></h3>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</header>
 
-    <h2>Добро пожаловать на личную страницу пользователя <span th:text="${user.getUsername()}">VALUE</span> </h2>
+<div class="row">
+    <div class="col-2">
+        <br>
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <span class="nav-link active">User</span>
+        </div>
+    </div>
 
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>LastName</th>
-            <th>Email</th>
-            <th>Age</th>
-            <th>Password</th>
-            <th>Roles</th>
-        </tr>
-        <tr th:each ="user : ${user}">
-            <td th:text="${user.getId()}"></td>
-            <td th:text="${user.getUsername()}"></td>
-            <td th:text="${user.getLastName()}"></td>
-            <td th:text="${user.getEmail()}"></td>
-            <td th:text="${user.getAge()}"></td>
-            <td th:text="${user.getPassword()}"></td>
-            <td th:text="${user.roleToString()}"></td>
-        </tr>
-    </table>
-    <p> Вернуться на <a href="/">главную страницу</a></p>
-    <br/><br/>
-    <form th:method="POST" th:action="@{/logout}">
-        <input type="submit" value="Logout!"/>
-    </form>
-
+    <div class="col-10 bg-light">
+        <div class="page-header">
+            <h2>User information-page</h2>
+        </div>
+        <div class="card">
+            <h5 class="card-header">About user</h5>
+            <div class="card-body">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Age</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each ="user : ${user}">
+                        <td th:text="${user.getId()}"></td>
+                        <td th:text="${user.getFirstName}"></td>
+                        <td th:text="${user.getLastName()}"></td>
+                        <td th:text="${user.getAge()}"></td>
+                        <td th:text="${user.getUserName}"></td>
+                        <td th:text="${user.roleToString()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Optional JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+
 </body>
-</center>
 </html>

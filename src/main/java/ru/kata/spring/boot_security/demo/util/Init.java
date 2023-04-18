@@ -22,8 +22,8 @@ public class Init {
 
     @PostConstruct
     public void initializeDB() {
-        User user = new User("admin", "admin", "admin@mail.ru", 25, "admin", Set.of(new Role("ROLE_ADMIN")));
-        User user1 = new User("user", "user", "user@mail.ru", 34, "user", Set.of(new Role("ROLE_USER")));
+        User user = new User("admin@mail.ru", "admin", "admin", 25, "admin", Set.of(new Role("ROLE_ADMIN")));
+        User user1 = new User("user@mail.ru", "user", "user", 34, "user", Set.of(new Role("ROLE_USER")));
         userService.saveUser(user);
         userService.saveUser(user1);
     }

@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,37 +17,38 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "user_name", unique = true)
-    private String userName;
-    @Column(name = "last_name")
-    private String lastName;
     @Column(name = "Email", unique = true)
-    private String email;
+    private String userName;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "lastName", unique = true)
+    private String lastName;
     @Column(name = "age")
     private int age;
     @Column(name = "password")
     private String password;
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> listRole = new HashSet<>();
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    private Set<Role> listRole;
 
     public User() {
     }
 
-    public User(String userName, String lastName, String email, int age, String password) {
+    public User(String userName, String firstName, String lastName, int age, String password) {
         this.userName = userName;
+        this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.age = age;
         this.password = password;
     }
 
-    public User(String userName, String lastName, String email, int age, String password, Set<Role> listRole) {
+    public User(String userName, String firstName, String lastName, int age, String password, Set<Role> listRole) {
         this.userName = userName;
+        this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.age = age;
         this.password = password;
         this.listRole = listRole;
@@ -69,20 +71,20 @@ public class User implements UserDetails {
         this.userName = userName;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String lastName) {
+        this.firstName = lastName;
+    }
+
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLastName(String email) {
+        this.lastName = email;
     }
 
     public int getAge() {
@@ -153,12 +155,12 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return age == user.age && Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(listRole, user.listRole);
+        return age == user.age && Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(password, user.password) && Objects.equals(listRole, user.listRole);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, lastName, email, age, password, listRole);
+        return Objects.hash(id, userName, firstName, lastName, age, password, listRole);
     }
 
     @Override
@@ -166,8 +168,8 @@ public class User implements UserDetails {
         return "User{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                ", lastName='" + firstName + '\'' +
+                ", email='" + lastName + '\'' +
                 ", age=" + age +
                 ", password='" + password + '\'' +
                 ", listRole=" + listRole +
