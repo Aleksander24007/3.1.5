@@ -19,7 +19,7 @@ public class User implements UserDetails {
     private Long id;
     @Column(name = "Email", unique = true)
     private String userName;
-    @Column(name = "first_name")
+    @Column(name = "firstName")
     private String firstName;
     @Column(name = "lastName", unique = true)
     private String lastName;
@@ -32,7 +32,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    private Set<Role> listRole;
+    private Set<Role> roles;
 
     public User() {
     }
@@ -45,13 +45,13 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public User(String userName, String firstName, String lastName, int age, String password, Set<Role> listRole) {
+    public User(String userName, String firstName, String lastName, int age, String password, Set<Role> roles) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
         this.password = password;
-        this.listRole = listRole;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -100,17 +100,17 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Set<Role> getListRole() {
-        return listRole;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setListRole(Set<Role> listRole) {
-        this.listRole = listRole;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String roleToString() {
         StringBuilder sb = new StringBuilder();
-        for (Role role : listRole) {
+        for (Role role : roles) {
             sb.append(role.getNameRole()).append(" ");
         }
         return sb.toString();
@@ -118,7 +118,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getListRole();
+        return getRoles();
     }
 
     public String getPassword() {
@@ -129,6 +129,7 @@ public class User implements UserDetails {
     public String getUsername() {
         return userName;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -155,12 +156,12 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return age == user.age && Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(password, user.password) && Objects.equals(listRole, user.listRole);
+        return age == user.age && Objects.equals(id, user.id) && Objects.equals(userName, user.userName) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userName, firstName, lastName, age, password, listRole);
+        return Objects.hash(id, userName, firstName, lastName, age, password, roles);
     }
 
     @Override
@@ -172,7 +173,7 @@ public class User implements UserDetails {
                 ", email='" + lastName + '\'' +
                 ", age=" + age +
                 ", password='" + password + '\'' +
-                ", listRole=" + listRole +
+                ", roles=" + roles +
                 '}';
     }
 

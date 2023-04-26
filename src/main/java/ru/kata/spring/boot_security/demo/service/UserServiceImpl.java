@@ -1,36 +1,37 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.configs.PasswordEncoder;
-import ru.kata.spring.boot_security.demo.model.Role;
+
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,@Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     @Transactional
     public void saveUser(User user) {
-        user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(user.getPassword()));
+        if (userRepository.findByUsername(user.getUserName()).isPresent()) {
+            return;
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
         if (pass.isEmpty()) {
             user.setPassword(userRepository.findById(user.getId()).get().getPassword());
         } else {
-            user.setPassword(passwordEncoder.bCryptPasswordEncoder().encode(pass));
+            user.setPassword(bCryptPasswordEncoder.encode(pass));
         }
         userRepository.save(user);
     }
