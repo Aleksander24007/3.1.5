@@ -1,29 +1,29 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 
-import org.modelmapper.ModelMapper;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
-import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
+import ru.kata.spring.boot_security.demo.util.Mapper;
 
 import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-public class AdminApiController {
+public class AdminRestController {
 
     private final UserService userService;
 
-    private final ModelMapper modelMapper;
+    private final Mapper mapper;
 
-    public AdminApiController(UserService userService, ModelMapper modelMapper) {
+    private AdminRestController(UserService userService, Mapper mapper) {
         this.userService = userService;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @GetMapping("/viewUser")
@@ -32,31 +32,26 @@ public class AdminApiController {
     }
 
     @GetMapping("/users")
-    public List<User> allUsers() {
-        return userService.allUsers();
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok(userService.allUsers());
     }
 
 
     @PostMapping("/users")
     public ResponseEntity<HttpStatus> createUser(@RequestBody UserDTO userDTO) {
-        userService.saveUser(convertToUser(userDTO));
+        userService.saveUser(mapper.convertToUser(userDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/users/{id}")
-    public User show(@PathVariable("id") Long id) {
-        User user = userService.getByUserId(id);
-        if(user==null){
-            throw new UserNotFoundException("User с ID " + id + " в базе данных отсутствует");
-        }
-
-        return user;
+    public ResponseEntity<User> show(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(userService.getByUserId(id));
     }
 
     @PutMapping("/users")
-    public User update(@RequestBody User user) {
+    public ResponseEntity<HttpStatus> update(@RequestBody User user) {
         userService.update(user);
-        return user;
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")
@@ -65,7 +60,4 @@ public class AdminApiController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    private User convertToUser(UserDTO userDTO) {
-        return modelMapper.map(userDTO, User.class);
-    }
 }

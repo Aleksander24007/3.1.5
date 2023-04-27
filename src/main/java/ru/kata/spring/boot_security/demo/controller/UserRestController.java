@@ -12,11 +12,11 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/user")
-public class UserApiController {
+public class UserRestController {
 
     private final UserService userService;
 
-    public UserApiController(UserService userService) {
+    public UserRestController(UserService userService) {
         this.userService = userService;
     }
 

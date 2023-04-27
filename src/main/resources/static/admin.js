@@ -211,12 +211,12 @@ function addUser() {
             'Content-Type': 'application/json;charset=UTF-8'
         },
         body: JSON.stringify({
-            'firstName': firstName,
-            'lastName': lastName,
-            'age': age,
-            'userName': userName,
-            'password': password,
-            'roles': roles
+            'firstName' : firstName,
+            'lastName'  : lastName,
+            'age' : age,
+            'userName' : userName,
+            'password' : password,
+            'roles' : roles,
         })
     })
         .then(() => {

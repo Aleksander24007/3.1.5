@@ -14,6 +14,7 @@ public class UserExceptionHandler {
         data.setMessage(exception.getMessage());
         return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler
     public ResponseEntity<UserErrorResponse> handleException(Exception exception) {
         UserErrorResponse data = new UserErrorResponse();

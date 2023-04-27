@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
+import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository,@Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void saveUser(User user) {
         if (userRepository.findByUsername(user.getUserName()).isPresent()) {
-            return;
+            throw new UserNotFoundException("User с userName " + user.getUserName() + " в базе данных есть");
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -40,7 +41,9 @@ public class UserServiceImpl implements UserService {
     public User getByUserId(Long id) {
         User user = null;
         Optional<User> userFromBD = userRepository.findById(id);
-        if (userFromBD.isPresent()) {
+        if (userFromBD == null) {
+            throw new UserNotFoundException("User с ID " + id + " в базе данных отсутствует");
+        } else {
             user = userFromBD.get();
         }
         return user;
