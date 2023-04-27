@@ -39,8 +39,8 @@ public class AdminRestController  {
 
 
     @PostMapping( "/users")
-    public ResponseEntity<HttpStatus> createUser(@RequestBody UserDTO userDTO) {
-        userService.saveUser(mapper.convertToUser(userDTO));
+    public ResponseEntity<HttpStatus> createUser(@RequestBody User user) {
+        userService.saveUser(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
