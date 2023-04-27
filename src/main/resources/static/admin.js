@@ -206,7 +206,7 @@ function addUser() {
 
 
     fetch(URL, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
         },

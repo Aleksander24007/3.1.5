@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.dto;
 
 import javax.management.relation.Role;
+
 import java.util.Set;
 
 public class UserDTO {

@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-public class AdminRestController {
+public class AdminRestController  {
 
     private final UserService userService;
 
@@ -37,7 +38,7 @@ public class AdminRestController {
     }
 
 
-    @PostMapping("/users")
+    @PostMapping( "/users")
     public ResponseEntity<HttpStatus> createUser(@RequestBody UserDTO userDTO) {
         userService.saveUser(mapper.convertToUser(userDTO));
         return ResponseEntity.ok(HttpStatus.OK);

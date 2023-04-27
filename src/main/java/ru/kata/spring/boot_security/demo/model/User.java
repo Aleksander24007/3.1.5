@@ -17,15 +17,15 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "Email", unique = true)
+    @Column(name = "Email", nullable = false, unique = true)
     private String userName;
-    @Column(name = "firstName")
+    @Column(name = "firstName", nullable = false)
     private String firstName;
-    @Column(name = "lastName", unique = true)
+    @Column(name = "lastName", nullable = false)
     private String lastName;
     @Column(name = "age")
     private int age;
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
@@ -53,13 +53,13 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+
     public Long getId() {
         return id;
     }
 
-    public User setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
     public String getUserName() {
